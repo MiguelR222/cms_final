@@ -1,11 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import { useSession } from 'next-auth/react';
+import Render from './renderPage'; // Adjust the path as necessary
 
 const Dashboard = () => {
   const { data: session, status } = useSession();
   const [sites, setSites] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [selectedSiteId, setSelectedSiteId] = useState(null);
+  const [siteData, setSiteData] = useState({});
 
   useEffect(() => {
     if (status === 'authenticated') {
@@ -31,6 +34,12 @@ const Dashboard = () => {
     }
   }, [status]);
 
+  const handleSiteSelection = (site) => {
+    setSelectedSiteId(site._id);
+    setSiteData(site);
+    console.log(site);
+  };
+
   if (loading) {
     return <p>Loading...</p>;
   }
@@ -46,20 +55,21 @@ const Dashboard = () => {
   return (
     <div>
       <h1>Dashboard</h1>
-      <table className="table-auto w-full">
-        <thead>
-          <tr>
-            <th className="px-4 py-2">Organization Name</th>
-          </tr>
-        </thead>
-        <tbody>
-          {sites.map((site) => (
-            <tr key={site._id}>
-              <td className="border px-4 py-2">{site.orgName}</td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
+      <div className="grid grid-cols-1 gap-4">
+        <div className="flex justify-between items-center p-4 bg-gray-800 text-white">Organization Name</div>
+        {sites.map((site) => (
+          <button
+            key={site._id}
+            onClick={() => handleSiteSelection(site)}
+            className={`border px-4 py-2 rounded ${
+              selectedSiteId === site._id ? 'bg-blue-500 text-white' : 'bg-gray-200'
+            }`}
+          >
+            {site.orgName}
+          </button>
+        ))}
+      </div>
+      <Render siteData={siteData} />
     </div>
   );
 };
