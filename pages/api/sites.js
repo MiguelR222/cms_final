@@ -1,5 +1,6 @@
 import connectDB from '@/libs/mongodb';
 import Site from '@/models/Site';
+import { getSession } from 'next-auth/react';
 
 export default async function handler(req, res) {
   const { method } = req;
@@ -9,7 +10,13 @@ export default async function handler(req, res) {
   switch (method) {
     case 'GET':
       try {
-        const sites = await Site.find({});
+        const session = await getSession({ req });
+
+        if (!session) {
+          return res.status(401).json({ success: false, error: 'Unauthorized' });
+        }
+
+        const sites = await Site.find({ userId: session.user.id });
         res.status(200).json({ success: true, data: sites });
       } catch (error) {
         console.error('GET error:', error);
