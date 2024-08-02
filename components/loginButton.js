@@ -31,16 +31,16 @@ export default function LoginButton() {
 
               <div className="mt-8 flex flex-wrap justify-center gap-4">
                 <Link
-                  href="/searchTrack"
+                  href="/template"
                   className="block w-full rounded bg-[#014017] px-12 py-3 text-sm font-medium text-[#F2F2F2] shadow hover:bg-[#41BFB3] focus:outline-none focus:ring active:bg-[#41BFB3] sm:w-auto transition transform hover:scale-110 "
                 >
-                  Search for Tracks
+                  Template
                 </Link>
                 <Link
-                  href="/topTracks"
+                  href="/dashboard"
                   className="block w-full rounded bg-[#014017] px-12 py-3 text-sm font-medium text-[#F2F2F2] shadow hover:bg-[#41BFB3] focus:outline-none focus:ring active:bg-[#41BFB3] sm:w-auto transition transform hover:scale-110 "
                 >
-                  Go to Top Tracks
+                  Dashboard
                 </Link>
               </div>
             </div>

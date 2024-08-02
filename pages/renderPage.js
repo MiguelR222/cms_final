@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { useSession } from 'next-auth/react';
+import Link from 'next/link';
 
-export default function Render({ siteData }) {
-  const { data: session } = useSession();
+export default function renderPage({ siteData }) {
   const [orgName, setOrgName] = useState('');
   const [heroText, setHeroText] = useState('');
   const [service1, setService1] = useState('');
@@ -23,12 +22,8 @@ export default function Render({ siteData }) {
     }
   }, [siteData]);
 
-  const handleSubmit = async (event) => {
-    event.preventDefault();
-
+  const updateSite = async () => {
     const data = {
-      name: session.user.name,
-      userId: session.user.id,
       orgName,
       heroInfo: heroText,
       serviceOne: service1,
@@ -39,8 +34,8 @@ export default function Render({ siteData }) {
     };
 
     try {
-      const response = await fetch('/api/sites', {
-        method: 'POST',
+      const response = await fetch(`/api/sites?id=${siteData._id}`, {
+        method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
         },
@@ -49,20 +44,39 @@ export default function Render({ siteData }) {
 
       const result = await response.json();
       if (response.ok) {
-        alert('Data saved successfully!');
+        alert('Data updated successfully!');
       } else {
-        console.error('Failed to save data:', result);
-        alert('Failed to save data.');
+        console.error('Failed to update data:', result);
+        alert('Failed to update data.');
       }
     } catch (error) {
       console.error('Error:', error);
-      alert('An error occurred while saving data.');
+      alert('An error occurred while updating data.');
+    }
+  };
+
+  const deleteSite = async () => {
+    try {
+      const response = await fetch(`/api/sites?id=${siteData._id}`, {
+        method: 'DELETE',
+      });
+
+      const result = await response.json();
+      if (response.ok) {
+        alert('Data deleted successfully!');
+      } else {
+        console.error('Failed to delete data:', result);
+        alert('Failed to delete data.');
+      }
+    } catch (error) {
+      console.error('Error:', error);
+      alert('An error occurred while deleting data.');
     }
   };
 
   return (
     <div className="text-black">
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={(e) => e.preventDefault()}>
         <header className="flex justify-between items-center p-4 bg-gray-800 text-white">
           <div className="text-2xl">Logo</div>
           <input
@@ -145,8 +159,24 @@ export default function Render({ siteData }) {
           </div>
         </footer>
 
-        <div className="p-4">
-          <button type="submit" className="px-4 py-2 bg-blue-500 text-white rounded">Save</button>
+        <div className="p-4 flex space-x-4">
+          <button
+            type="button"
+            onClick={updateSite}
+            className="px-4 py-2 bg-blue-500 text-white rounded"
+          >
+            Update
+          </button>
+          <button
+            type="button"
+            onClick={deleteSite}
+            className="px-4 py-2 bg-red-500 text-white rounded"
+          >
+            Delete
+          </button>
+          <Link  className="px-4 py-2 bg-gray-500 text-white rounded" href={{ pathname: `/preview`, query: siteData }}>
+            Preview
+          </Link>
         </div>
       </form>
     </div>
