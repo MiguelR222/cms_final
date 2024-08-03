@@ -54,14 +54,18 @@ export default function Preview() {
         </section>
 
         <footer id="contact" className="p-12 bg-gray-50 text-center">
-          <h2 className="text-2xl font-semibold mb-8">Contact Us</h2>
+          <h2 className="text-2xl font-semibold mb-8">Contact Us At</h2>
           <div className="w-full max-w-2xl mx-auto">
-            <div className="w-full p-4 border border-gray-300 rounded-lg shadow-md mb-4">
+          <div className="w-full p-4 rounded-lg shadow-md mb-4">
+            <a href="mailto:${siteData.contactEmail}" className="hover:underline">
               ${siteData.contactEmail}
-            </div>
-            <div className="w-full p-4 border border-gray-300 rounded-lg shadow-md">
+            </a>
+          </div>
+          <div className="w-full p-4 rounded-lg shadow-md">
+            <a href="tel:${siteData.contactPhone}" className="hover:underline">
               ${siteData.contactPhone}
-            </div>
+            </a>
+          </div>
           </div>
           <div className="text-gray-600 mt-8">
             &copy; 2024 All rights reserved.
@@ -124,14 +128,18 @@ export default function Preview() {
       </section>
 
       <footer id="contact" className="p-12 bg-gray-50 text-center">
-        <h2 className="text-2xl font-semibold mb-8">Contact Us</h2>
+        <h2 className="text-2xl font-semibold mb-8">Contact Us At</h2>
         <div className="w-full max-w-2xl mx-auto">
-          <div className="w-full p-4 border border-gray-300 rounded-lg shadow-md mb-4">
-            {siteData.contactEmail}
-          </div>
-          <div className="w-full p-4 border border-gray-300 rounded-lg shadow-md">
-            {siteData.contactPhone}
-          </div>
+          <div className="w-full p-4 rounded-lg shadow-md mb-4">
+      <a href={`mailto:${siteData.contactEmail}`} className="hover:underline">
+        {siteData.contactEmail}
+      </a>
+    </div>
+    <div className="w-full p-4 rounded-lg shadow-md">
+      <a href={`tel:${siteData.contactPhone}`} className="hover:underline">
+        {siteData.contactPhone}
+      </a>
+    </div>
         </div>
         <div className="text-gray-600 mt-8">
           &copy; 2024 All rights reserved.
