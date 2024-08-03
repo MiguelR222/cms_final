@@ -110,7 +110,7 @@ export default function Template() {
           </div>
           <input
             type="text"
-            className="flex-grow mx-4 p-2 border border-gray-300 rounded"
+            className="flex-grow mx-4 p-2 border border-gray-300 rounded text-black"
             placeholder="Organization Name"
             onChange={(e) => setOrgName(e.target.value)}
           />

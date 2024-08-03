@@ -22,10 +22,10 @@ export default function LoginButton() {
           <div className="mx-auto max-w-screen-xl px-4 py-32 lg:flex lg:h-screen lg:items-center">
             <div className="mx-auto max-w-xl text-center">
               <h1 className="text-3xl font-extrabold sm:text-5xl text-[#014017]">
-                Suggestify
+              DesignHub CMS
                 <strong className="font-extrabold text-[#025920] sm:block">
                   {" "}
-                  Great music for great people.{" "}
+                  Your Hub for Stunning Website.{" "}
                 </strong>
               </h1>
 
