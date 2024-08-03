@@ -58,16 +58,18 @@ const Dashboard = () => {
   }
 
   return (
-    <div>
-      <h1>Dashboard</h1>
+    <div className="text-gray-800 font-sans p-6">
+      <h1 className="text-3xl font-semibold mb-6">Dashboard</h1>
       <div className="grid grid-cols-1 gap-4">
-        <div className="flex justify-between items-center p-4 bg-gray-800 text-white">Organization Name</div>
+        <div className="flex justify-between items-center p-4 bg-white shadow-md rounded-lg">
+          <span className="text-xl font-semibold">Organization Name</span>
+        </div>
         {sites.map((site) => (
           <button
             key={site._id}
             onClick={() => handleSiteSelection(site)}
-            className={`border px-4 py-2 rounded ${
-              selectedSiteId === site._id ? 'bg-blue-500 text-white' : 'bg-gray-200'
+            className={`border px-4 py-2 rounded-lg shadow-md transition-colors duration-200 ${
+              selectedSiteId === site._id ? 'bg-blue-500 text-white' : 'bg-gray-200 hover:bg-gray-300'
             }`}
           >
             {site.orgName}
