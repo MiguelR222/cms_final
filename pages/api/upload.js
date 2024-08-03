@@ -1,51 +1,80 @@
-// pages/api/upload.js
-import nextConnect from 'next-connect';
-import multer from 'multer';
-import AdmZip from 'adm-zip';
-import dbConnect from '../../lib/dbConnect';
-import File from '../../models/File'; // Assuming you have a File model
-
-const upload = multer({
-  storage: multer.memoryStorage(),
-});
-
-const apiRoute = nextConnect({
-  onError(error, req, res) {
-    res.status(501).json({ error: `Sorry something Happened! ${error.message}` });
-  },
-  onNoMatch(req, res) {
-    res.status(405).json({ error: `Method '${req.method}' Not Allowed` });
-  },
-});
-
-apiRoute.use(upload.single('file'));
-
-apiRoute.post(async (req, res) => {
-  await dbConnect();
-
-  // Compress the image using adm-zip
-  const zip = new AdmZip();
-  zip.addFile(req.file.originalname, req.file.buffer);
-  const compressedBuffer = zip.toBuffer();
-
-  const newFile = new File({
-    filename: `${req.file.originalname}.zip`,
-    contentType: 'application/zip',
-    data: compressedBuffer,
-  });
-
-  try {
-    const savedFile = await newFile.save();
-    res.status(201).json({ success: true, file: savedFile });
-  } catch (error) {
-    res.status(500).json({ success: false, error: error.message });
-  }
-});
-
-export default apiRoute;
+import { google } from 'googleapis';
+import { getToken } from 'next-auth/jwt';
+import stream from 'stream';
 
 export const config = {
   api: {
-    bodyParser: false,
+    bodyParser: {
+      sizeLimit: '10mb', 
+    },
   },
 };
+
+async function bufferToStream(buffer) {
+  const duplexStream = new stream.Duplex();
+  duplexStream.push(buffer);
+  duplexStream.push(null);
+  return duplexStream;
+}
+
+export default async function handler(req, res) {
+  if (req.method !== 'POST') {
+    return res.status(405).json({ message: 'Method not allowed' });
+  }
+
+  const token = await getToken({ req, secret: process.env.NEXTAUTH_SECRET });
+  if (!token) {
+    return res.status(401).json({ message: 'Unauthorized' });
+  }
+
+  const { file } = req.body;
+
+  if (!file) {
+    return res.status(400).json({ message: 'No file provided' });
+  }
+
+  try {
+    const auth = new google.auth.OAuth2(
+      process.env.GOOGLE_CLIENT_ID,
+      process.env.GOOGLE_CLIENT_SECRET
+    );
+
+    auth.setCredentials({ refresh_token: token.refreshToken });
+
+    const drive = google.drive({ version: 'v3', auth });
+
+    const fileMetadata = {
+      name: file.name,
+    };
+
+    const media = {
+      mimeType: file.type,
+      body: await bufferToStream(Buffer.from(file.data, 'base64')),
+    };
+
+    const fileResponse = await drive.files.create({
+      requestBody: fileMetadata,
+      media: media,
+      fields: 'id',
+    });
+
+    const fileId = fileResponse.data.id;
+
+    // Set file permissions to make it publicly accessible
+    await drive.permissions.create({
+      fileId: fileId,
+      requestBody: {
+        role: 'reader',
+        type: 'anyone',
+      },
+    });
+
+    const fileLink = `https://drive.google.com/uc?id=${fileId}`;
+
+    res.status(200).json({ fileLink });
+  } catch (error) {
+    console.error('Error uploading file:', error);
+    res.status(500).json({ message: 'Error uploading file' });
+  }
+}
+

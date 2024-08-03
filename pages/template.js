@@ -9,23 +9,69 @@ export default function Template() {
   const [service3, setService3] = useState('');
   const [contactEmail, setContactEmail] = useState('');
   const [contactPhone, setContactPhone] = useState('');
-  const { data: session } = useSession();
+  const [logo, setLogo] = useState('');
+  const [heroImage, setHeroImage] = useState('');
+  const [serviceImage1, setServiceImage1] = useState('');
+  const [serviceImage2, setServiceImage2] = useState('');
+  const [serviceImage3, setServiceImage3] = useState('');
+  const { data: session, status } = useSession();
+
+  const handleFileUpload = async (file, setImage) => {
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = async () => {
+      const fileData = reader.result.split(',')[1]; 
+      const body = {
+        file: {
+          name: file.name,
+          type: file.type,
+          data: fileData,
+        },
+      };
+
+      try {
+        const response = await fetch('/api/upload', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(body),
+        });
+
+        const result = await response.json();
+        if (response.ok) {
+          setImage(result.fileLink);
+        } else {
+          console.error('Failed to upload file:', result);
+          alert('Failed to upload file.');
+        }
+      } catch (error) {
+        console.error('Error:', error);
+        alert('An error occurred while uploading file.');
+      }
+    };
+  };
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-  
+
     const data = {
       name: session.user.name,
       userId: session.user.id,
       orgName,
-      heroInfo: heroText, 
-      serviceOne: service1, 
-      serviceTwo: service2, 
-      serviceThree: service3, 
+      heroInfo: heroText,
+      serviceOne: service1,
+      serviceTwo: service2,
+      serviceThree: service3,
       contactEmail,
-      contactPhone
+      contactPhone,
+      logo,
+      heroImage,
+      serviceImage1,
+      serviceImage2,
+      serviceImage3,
     };
-  
+
     try {
       const response = await fetch('/api/sites', {
         method: 'POST',
@@ -34,7 +80,7 @@ export default function Template() {
         },
         body: JSON.stringify(data),
       });
-  
+
       const result = await response.json();
       if (response.ok) {
         alert('Data saved successfully!');
@@ -47,13 +93,20 @@ export default function Template() {
       alert('An error occurred while saving data.');
     }
   };
-  
 
   return (
     <div className="text-black">
       <form onSubmit={handleSubmit}>
         <header className="flex justify-between items-center p-4 bg-gray-800 text-white">
-          <div className="text-2xl">Logo</div>
+          <div className="text-2xl">
+            Logo
+            <input
+              type="file"
+              accept="image/*"
+              onChange={(e) => handleFileUpload(e.target.files[0], setLogo)}
+              className="ml-2"
+            />
+          </div>
           <input
             type="text"
             className="flex-grow mx-4 p-2 border border-gray-300 rounded"
@@ -69,7 +122,13 @@ export default function Template() {
 
         <section id="hero" className="flex p-12 bg-gray-100">
           <div className="flex-none w-1/2">
-            <img src="https://via.placeholder.com/400" alt="Hero" className="w-full h-auto" />
+            <img src={heroImage || "https://via.placeholder.com/400"} alt="Hero" className="w-full h-auto" />
+            <input
+              type="file"
+              accept="image/*"
+              onChange={(e) => handleFileUpload(e.target.files[0], setHeroImage)}
+              className="ml-2"
+            />
           </div>
           <div className="flex-grow ml-8">
             <textarea
@@ -83,7 +142,13 @@ export default function Template() {
 
         <section id="services" className="flex justify-around p-12 bg-gray-200">
           <div className="flex flex-col items-center w-1/3">
-            <img src="https://via.placeholder.com/150" alt="Service 1" className="w-24 h-24 mb-2" />
+            <img src={serviceImage1 || "https://via.placeholder.com/150"} alt="Service 1" className="w-24 h-24 mb-2" />
+            <input
+              type="file"
+              accept="image/*"
+              onChange={(e) => handleFileUpload(e.target.files[0], setServiceImage1)}
+              className="ml-2"
+            />
             <textarea
               value={service1}
               onChange={(e) => setService1(e.target.value)}
@@ -92,7 +157,13 @@ export default function Template() {
             ></textarea>
           </div>
           <div className="flex flex-col items-center w-1/3">
-            <img src="https://via.placeholder.com/150" alt="Service 2" className="w-24 h-24 mb-2" />
+            <img src={serviceImage2 || "https://via.placeholder.com/150"} alt="Service 2" className="w-24 h-24 mb-2" />
+            <input
+              type="file"
+              accept="image/*"
+              onChange={(e) => handleFileUpload(e.target.files[0], setServiceImage2)}
+              className="ml-2"
+            />
             <textarea
               value={service2}
               onChange={(e) => setService2(e.target.value)}
@@ -101,7 +172,13 @@ export default function Template() {
             ></textarea>
           </div>
           <div className="flex flex-col items-center w-1/3">
-            <img src="https://via.placeholder.com/150" alt="Service 3" className="w-24 h-24 mb-2" />
+            <img src={serviceImage3 || "https://via.placeholder.com/150"} alt="Service 3" className="w-24 h-24 mb-2" />
+            <input
+              type="file"
+              accept="image/*"
+              onChange={(e) => handleFileUpload(e.target.files[0], setServiceImage3)}
+              className="ml-2"
+            />
             <textarea
               value={service3}
               onChange={(e) => setService3(e.target.value)}
