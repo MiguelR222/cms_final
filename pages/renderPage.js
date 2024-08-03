@@ -154,7 +154,14 @@ export default function RenderPage({ siteData }) {
 
         <section id="hero" className="relative flex items-center justify-center h-screen bg-cover bg-center text-white" style={{ backgroundImage: `url(${heroImage})` }}>
           <div className="bg-black bg-opacity-50 p-8 rounded-lg text-center">
-            <h1 className="text-4xl font-bold">{heroText}</h1>
+          <h1 className="w-full font-bold">
+            <textarea
+              value={heroText}
+              onChange={(e) => setHeroText(e.target.value)}
+              placeholder="Enter hero text here"
+              className=" w-full h-32 p-4 border border-gray-300 rounded-lg shadow-md text-black"
+            ></textarea>
+          </h1>
             <input
               type="file"
               accept="image/*"

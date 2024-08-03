@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useSession } from 'next-auth/react';
+import { Disclosure } from '@headlessui/react';
+import { ChevronUpIcon } from '@heroicons/react/20/solid';
 import RenderPage from './renderPage';
 
 const Dashboard = () => {
@@ -58,23 +60,36 @@ const Dashboard = () => {
   }
 
   return (
-    <div className="text-gray-800 font-sans p-6">
-      <h1 className="text-3xl font-semibold mb-6">Dashboard</h1>
+    <div className="text-gray-800 font-sans p-6 bg-gray-50 min-h-screen">
+      <h1 className="text-3xl font-bold mb-6 text-blue-900 text-center">Dashboard</h1>
       <div className="grid grid-cols-1 gap-4">
-        <div className="flex justify-between items-center p-4 bg-white shadow-md rounded-lg">
-          <span className="text-xl font-semibold">Organization Name</span>
-        </div>
-        {sites.map((site) => (
-          <button
-            key={site._id}
-            onClick={() => handleSiteSelection(site)}
-            className={`border px-4 py-2 rounded-lg shadow-md transition-colors duration-200 ${
-              selectedSiteId === site._id ? 'bg-blue-500 text-white' : 'bg-gray-200 hover:bg-gray-300'
-            }`}
-          >
-            {site.orgName}
-          </button>
-        ))}
+        <Disclosure>
+          {({ open }) => (
+            <>
+              <Disclosure.Button className="flex justify-between items-center w-full p-4 bg-white shadow-md rounded-lg text-left text-xl font-semibold text-blue-600">
+                <span>
+                  {selectedSiteId
+                    ? `Selected Organization: ${siteData.orgName}`
+                    : 'Choose an Organization'}
+                </span>
+                <ChevronUpIcon className={`${open ? 'transform rotate-180' : ''} w-5 h-5 text-blue-600`} />
+              </Disclosure.Button>
+              <Disclosure.Panel className="p-4 bg-white shadow-md rounded-lg">
+                {sites.map((site) => (
+                  <button
+                    key={site._id}
+                    onClick={() => handleSiteSelection(site)}
+                    className={`w-full text-left border px-4 py-2 rounded-lg shadow-md transition-colors duration-200 mb-2 ${
+                      selectedSiteId === site._id ? 'bg-blue-400 text-white' : 'bg-blue-200 hover:bg-blue-300'
+                    }`}
+                  >
+                    {site.orgName}
+                  </button>
+                ))}
+              </Disclosure.Panel>
+            </>
+          )}
+        </Disclosure>
       </div>
       {selectedSiteId && <RenderPage siteData={siteData} />}
     </div>
