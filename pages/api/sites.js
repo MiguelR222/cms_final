@@ -11,10 +11,12 @@ export default async function handler(req, res) {
     case 'GET':
       try {
         const session = await getSession({ req });
-
+        console.log('Session in API route:', session);
+        
         if (!session) {
           return res.status(401).json({ success: false, error: 'Unauthorized' });
         }
+        
 
         const sites = await Site.find({ userId: session.user.id });
         res.status(200).json({ success: true, data: sites });

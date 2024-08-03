@@ -11,12 +11,14 @@ const Dashboard = () => {
   const [siteData, setSiteData] = useState({});
 
   useEffect(() => {
+    console.log("Session status:", status);
+    console.log("Session data:", session);
     if (status === 'authenticated') {
       const fetchSites = async () => {
         try {
           const response = await fetch('/api/sites', {
             headers: {
-              Authorization: `Bearer ${session?.accessToken}`,
+              Authorization: `Bearer ${session.accessToken}`,
             },
           });
           const data = await response.json();
@@ -36,7 +38,7 @@ const Dashboard = () => {
     } else {
       setLoading(false);
     }
-  }, [status, session?.accessToken]);
+  }, [status, session]);
 
   const handleSiteSelection = (site) => {
     setSelectedSiteId(site._id);
@@ -72,7 +74,7 @@ const Dashboard = () => {
           </button>
         ))}
       </div>
-      <RenderPage siteData={siteData} />
+      {selectedSiteId && <RenderPage siteData={siteData} />}
     </div>
   );
 };
