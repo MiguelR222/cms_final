@@ -12,9 +12,9 @@ export default async function handler(req, res) {
       try {
         const session = await getSession({ req });
 
-        if (!session) {
-          return res.status(401).json({ success: false, error: 'Unauthorized' });
-        }
+        // if (!session) {
+        //   return res.status(401).json({ success: false, error: 'Unauthorized' });
+        // }
 
         const sites = await Site.find({ userId: session.user.id });
         res.status(200).json({ success: true, data: sites });
