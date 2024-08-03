@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useSession } from 'next-auth/react';
-import Render from './renderPage';
+import RenderPage from './renderPage';
 
 const Dashboard = () => {
   const { data: session, status } = useSession();
@@ -14,12 +14,16 @@ const Dashboard = () => {
     if (status === 'authenticated') {
       const fetchSites = async () => {
         try {
-          const response = await fetch('/api/sites');
+          const response = await fetch('/api/sites', {
+            headers: {
+              Authorization: `Bearer ${session?.accessToken}`,
+            },
+          });
           const data = await response.json();
-          if (data.success) {
+          if (response.ok) {
             setSites(data.data);
           } else {
-            throw new Error(data.error);
+            throw new Error(data.error || 'Failed to fetch sites');
           }
         } catch (error) {
           setError(error.message);
@@ -32,12 +36,11 @@ const Dashboard = () => {
     } else {
       setLoading(false);
     }
-  }, [status]);
+  }, [status, session?.accessToken]);
 
   const handleSiteSelection = (site) => {
     setSelectedSiteId(site._id);
     setSiteData(site);
-    console.log(site);
   };
 
   if (loading) {
@@ -69,7 +72,7 @@ const Dashboard = () => {
           </button>
         ))}
       </div>
-      <Render siteData={siteData} />
+      <RenderPage siteData={siteData} />
     </div>
   );
 };
