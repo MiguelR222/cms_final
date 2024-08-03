@@ -3,6 +3,7 @@ import { useSession } from 'next-auth/react';
 import { Disclosure } from '@headlessui/react';
 import { ChevronUpIcon } from '@heroicons/react/20/solid';
 import RenderPage from './renderPage';
+import Navbar from '@/components/navBar';
 
 const Dashboard = () => {
   const { data: session, status } = useSession();
@@ -61,6 +62,8 @@ const Dashboard = () => {
 
   return (
     <div className="text-gray-800 font-sans p-6 bg-gray-50 min-h-screen">
+      <Navbar />
+      
       <h1 className="text-3xl font-bold mb-6 text-blue-900 text-center">Dashboard</h1>
       <div className="grid grid-cols-1 gap-4">
         <Disclosure>

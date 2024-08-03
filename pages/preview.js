@@ -1,5 +1,6 @@
 import React from 'react';
 import { useRouter } from 'next/router';
+import Navbar from '@/components/navBar';
 
 export default function Preview() {
   const router = useRouter();
@@ -77,6 +78,7 @@ export default function Preview() {
 
   return (
     <div className="text-gray-800 font-sans">
+      <Navbar/>
       <header className="flex justify-between items-center p-6 bg-white shadow-md">
         <div className="text-xl font-semibold">
           {siteData.logo && <img src={siteData.logo} alt="Logo" className="w-16 h-auto object-contain" />}

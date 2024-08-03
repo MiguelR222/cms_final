@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useSession } from 'next-auth/react';
+import Navbar from '@/components/navBar';
 
 export default function Template() {
   const [orgName, setOrgName] = useState('');
@@ -96,6 +97,7 @@ export default function Template() {
 
   return (
     <div className="text-gray-800 font-sans">
+      <Navbar />
       <form onSubmit={handleSubmit}>
         <header className="flex justify-between items-center p-6 bg-white shadow-md">
           <div className="text-xl font-semibold">
