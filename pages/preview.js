@@ -8,7 +8,7 @@ export default function Preview() {
   return (
     <div className="text-black">
       <header className="flex justify-between items-center p-4 bg-gray-800 text-white">
-        <div className="text-2xl">Logo</div>
+      <img src={siteData.logo} alt="Service 1" className="w-24 h-24 mb-2" />
         <div className="flex-grow mx-4 p-2 border border-gray-300 rounded">
           {siteData.orgName}
         </div>
@@ -21,7 +21,7 @@ export default function Preview() {
 
       <section id="hero" className="flex p-12 bg-gray-100">
         <div className="flex-none w-1/2">
-          <img src="https://drive.usercontent.google.com/download?id=1rY6GMO-z0LsURWKK47u5Z7YRUFTTpUc3" alt="Hero" className="w-full h-auto" />
+          <img src={siteData.heroImage} alt="Hero" className="w-full h-auto" />
         </div>
         <div className="flex-grow ml-8">
           <div className="w-full h-full p-4 border border-gray-300 rounded">
@@ -32,19 +32,19 @@ export default function Preview() {
 
       <section id="services" className="flex justify-around p-12 bg-gray-200">
         <div className="flex flex-col items-center w-1/3">
-          <img src="https://via.placeholder.com/150" alt="Service 1" className="w-24 h-24 mb-2" />
+          <img src={siteData.serviceImage1} alt="Service 1" className="w-24 h-24 mb-2" />
           <div className="w-full p-2 border border-gray-300 rounded">
             {siteData.serviceOne}
           </div>
         </div>
         <div className="flex flex-col items-center w-1/3">
-          <img src="https://via.placeholder.com/150" alt="Service 2" className="w-24 h-24 mb-2" />
+          <img src={siteData.serviceImage2} alt="Service 2" className="w-24 h-24 mb-2" />
           <div className="w-full p-2 border border-gray-300 rounded">
             {siteData.serviceTwo}
           </div>
         </div>
         <div className="flex flex-col items-center w-1/3">
-          <img src="https://via.placeholder.com/150" alt="Service 3" className="w-24 h-24 mb-2" />
+          <img src={siteData.serviceImage3} alt="Service 3" className="w-24 h-24 mb-2" />
           <div className="w-full p-2 border border-gray-300 rounded">
             {siteData.serviceThree}
           </div>

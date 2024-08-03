@@ -36,7 +36,7 @@ export default function RenderPage({ siteData }) {
     const reader = new FileReader();
     reader.readAsDataURL(file);
     reader.onload = async () => {
-      const fileData = reader.result.split(',')[1]; 
+      const fileData = reader.result.split(',')[1];
       const body = {
         file: {
           name: file.name,

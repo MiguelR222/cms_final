@@ -100,6 +100,7 @@ export default function Template() {
         <header className="flex justify-between items-center p-4 bg-gray-800 text-white">
           <div className="text-2xl">
             Logo
+            {logo && <img src={logo} alt="Logo" className="w-24 h-auto object-contain" />}
             <input
               type="file"
               accept="image/*"
@@ -122,7 +123,7 @@ export default function Template() {
 
         <section id="hero" className="flex p-12 bg-gray-100">
           <div className="flex-none w-1/2">
-            <img src={heroImage || "https://via.placeholder.com/400"} alt="Hero" className="w-full h-auto" />
+            {heroImage && <img src={heroImage} alt="Hero" className="w-full h-auto object-contain" />}
             <input
               type="file"
               accept="image/*"
@@ -142,7 +143,7 @@ export default function Template() {
 
         <section id="services" className="flex justify-around p-12 bg-gray-200">
           <div className="flex flex-col items-center w-1/3">
-            <img src={serviceImage1 || "https://via.placeholder.com/150"} alt="Service 1" className="w-24 h-24 mb-2" />
+            {serviceImage1 && <img src={serviceImage1} alt="Service 1" className="w-24 h-24 mb-2 object-contain" />}
             <input
               type="file"
               accept="image/*"
@@ -157,7 +158,7 @@ export default function Template() {
             ></textarea>
           </div>
           <div className="flex flex-col items-center w-1/3">
-            <img src={serviceImage2 || "https://via.placeholder.com/150"} alt="Service 2" className="w-24 h-24 mb-2" />
+            {serviceImage2 && <img src={serviceImage2} alt="Service 2" className="w-24 h-24 mb-2 object-contain" />}
             <input
               type="file"
               accept="image/*"
@@ -172,7 +173,7 @@ export default function Template() {
             ></textarea>
           </div>
           <div className="flex flex-col items-center w-1/3">
-            <img src={serviceImage3 || "https://via.placeholder.com/150"} alt="Service 3" className="w-24 h-24 mb-2" />
+            {serviceImage3 && <img src={serviceImage3} alt="Service 3" className="w-24 h-24 mb-2 object-contain" />}
             <input
               type="file"
               accept="image/*"
