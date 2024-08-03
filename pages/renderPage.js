@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 
-export default function renderPage({ siteData }) {
+export default function RenderPage({ siteData }) {
   const [orgName, setOrgName] = useState('');
   const [heroText, setHeroText] = useState('');
   const [service1, setService1] = useState('');
@@ -9,6 +9,11 @@ export default function renderPage({ siteData }) {
   const [service3, setService3] = useState('');
   const [contactEmail, setContactEmail] = useState('');
   const [contactPhone, setContactPhone] = useState('');
+  const [logo, setLogo] = useState('');
+  const [heroImage, setHeroImage] = useState('');
+  const [serviceImage1, setServiceImage1] = useState('');
+  const [serviceImage2, setServiceImage2] = useState('');
+  const [serviceImage3, setServiceImage3] = useState('');
 
   useEffect(() => {
     if (siteData) {
@@ -19,8 +24,49 @@ export default function renderPage({ siteData }) {
       setService3(siteData.serviceThree || '');
       setContactEmail(siteData.contactEmail || '');
       setContactPhone(siteData.contactPhone || '');
+      setLogo(siteData.logo || '');
+      setHeroImage(siteData.heroImage || '');
+      setServiceImage1(siteData.serviceImage1 || '');
+      setServiceImage2(siteData.serviceImage2 || '');
+      setServiceImage3(siteData.serviceImage3 || '');
     }
   }, [siteData]);
+
+  const handleFileUpload = async (file, setImage) => {
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = async () => {
+      const fileData = reader.result.split(',')[1]; 
+      const body = {
+        file: {
+          name: file.name,
+          type: file.type,
+          data: fileData,
+        },
+      };
+
+      try {
+        const response = await fetch('/api/upload', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(body),
+        });
+
+        const result = await response.json();
+        if (response.ok) {
+          setImage(result.fileLink);
+        } else {
+          console.error('Failed to upload file:', result);
+          alert('Failed to upload file.');
+        }
+      } catch (error) {
+        console.error('Error:', error);
+        alert('An error occurred while uploading file.');
+      }
+    };
+  };
 
   const updateSite = async () => {
     const data = {
@@ -31,6 +77,11 @@ export default function renderPage({ siteData }) {
       serviceThree: service3,
       contactEmail,
       contactPhone,
+      logo,
+      heroImage,
+      serviceImage1,
+      serviceImage2,
+      serviceImage3,
     };
 
     try {
@@ -78,7 +129,15 @@ export default function renderPage({ siteData }) {
     <div className="text-black">
       <form onSubmit={(e) => e.preventDefault()}>
         <header className="flex justify-between items-center p-4 bg-gray-800 text-white">
-          <div className="text-2xl">Logo</div>
+          <div className="text-2xl">
+            {logo && <img src={logo} alt="Logo" className="w-24 h-auto object-contain" />}
+            <input
+              type="file"
+              accept="image/*"
+              onChange={(e) => handleFileUpload(e.target.files[0], setLogo)}
+              className="ml-2"
+            />
+          </div>
           <input
             type="text"
             className="flex-grow mx-4 p-2 border border-gray-300 rounded"
@@ -95,7 +154,13 @@ export default function renderPage({ siteData }) {
 
         <section id="hero" className="flex p-12 bg-gray-100">
           <div className="flex-none w-1/2">
-            <img src="https://via.placeholder.com/400" alt="Hero" className="w-full h-auto" />
+            {heroImage && <img src={heroImage} alt="Hero" className="w-full h-auto object-contain" />}
+            <input
+              type="file"
+              accept="image/*"
+              onChange={(e) => handleFileUpload(e.target.files[0], setHeroImage)}
+              className="ml-2"
+            />
           </div>
           <div className="flex-grow ml-8">
             <textarea
@@ -109,7 +174,13 @@ export default function renderPage({ siteData }) {
 
         <section id="services" className="flex justify-around p-12 bg-gray-200">
           <div className="flex flex-col items-center w-1/3">
-            <img src="https://via.placeholder.com/150" alt="Service 1" className="w-24 h-24 mb-2" />
+            {serviceImage1 && <img src={serviceImage1} alt="Service 1" className="w-24 h-24 mb-2 object-contain" />}
+            <input
+              type="file"
+              accept="image/*"
+              onChange={(e) => handleFileUpload(e.target.files[0], setServiceImage1)}
+              className="ml-2"
+            />
             <textarea
               value={service1}
               onChange={(e) => setService1(e.target.value)}
@@ -118,7 +189,13 @@ export default function renderPage({ siteData }) {
             ></textarea>
           </div>
           <div className="flex flex-col items-center w-1/3">
-            <img src="https://via.placeholder.com/150" alt="Service 2" className="w-24 h-24 mb-2" />
+            {serviceImage2 && <img src={serviceImage2} alt="Service 2" className="w-24 h-24 mb-2 object-contain" />}
+            <input
+              type="file"
+              accept="image/*"
+              onChange={(e) => handleFileUpload(e.target.files[0], setServiceImage2)}
+              className="ml-2"
+            />
             <textarea
               value={service2}
               onChange={(e) => setService2(e.target.value)}
@@ -127,7 +204,13 @@ export default function renderPage({ siteData }) {
             ></textarea>
           </div>
           <div className="flex flex-col items-center w-1/3">
-            <img src="https://via.placeholder.com/150" alt="Service 3" className="w-24 h-24 mb-2" />
+            {serviceImage3 && <img src={serviceImage3} alt="Service 3" className="w-24 h-24 mb-2 object-contain" />}
+            <input
+              type="file"
+              accept="image/*"
+              onChange={(e) => handleFileUpload(e.target.files[0], setServiceImage3)}
+              className="ml-2"
+            />
             <textarea
               value={service3}
               onChange={(e) => setService3(e.target.value)}
@@ -174,8 +257,8 @@ export default function renderPage({ siteData }) {
           >
             Delete
           </button>
-          <Link  className="px-4 py-2 bg-gray-500 text-white rounded" href={{ pathname: `/preview`, query: siteData }}>
-            Preview
+          <Link href={{ pathname: `/preview`, query: siteData }} className="px-4 py-2 bg-gray-500 text-white rounded">
+              Preview
           </Link>
         </div>
       </form>

@@ -55,12 +55,11 @@ export default async function handler(req, res) {
     const fileResponse = await drive.files.create({
       requestBody: fileMetadata,
       media: media,
-      fields: 'id',
+      fields: 'id, webViewLink',
     });
 
     const fileId = fileResponse.data.id;
 
-    // Set file permissions to make it publicly accessible
     await drive.permissions.create({
       fileId: fileId,
       requestBody: {
@@ -69,7 +68,7 @@ export default async function handler(req, res) {
       },
     });
 
-    const fileLink = `https://drive.google.com/uc?id=${fileId}`;
+    const fileLink = fileResponse.data.webViewLink;
 
     res.status(200).json({ fileLink });
   } catch (error) {
@@ -77,4 +76,3 @@ export default async function handler(req, res) {
     res.status(500).json({ message: 'Error uploading file' });
   }
 }
-

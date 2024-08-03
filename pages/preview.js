@@ -21,7 +21,7 @@ export default function Preview() {
 
       <section id="hero" className="flex p-12 bg-gray-100">
         <div className="flex-none w-1/2">
-          <img src="https://via.placeholder.com/400" alt="Hero" className="w-full h-auto" />
+          <img src="https://drive.usercontent.google.com/download?id=1rY6GMO-z0LsURWKK47u5Z7YRUFTTpUc3" alt="Hero" className="w-full h-auto" />
         </div>
         <div className="flex-grow ml-8">
           <div className="w-full h-full p-4 border border-gray-300 rounded">

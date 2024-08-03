@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useSession } from 'next-auth/react';
-import Render from './renderPage'; // Adjust the path as necessary
+import Render from './renderPage';
 
 const Dashboard = () => {
   const { data: session, status } = useSession();
